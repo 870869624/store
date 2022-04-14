@@ -126,12 +126,47 @@ func Deleteuser(id string) *errors.Error {
 }
 
 //增加手机号到数据库中
-func AddPhone(id int, phone string) *errors.Error {
-	if len(phone) != 11 {
-		result := errors.New("电话号码输入错误！")
+// func AddPhone(id int, phone string) *errors.Error {
+// 	if len(phone) != 11 {
+// 		result := errors.New("电话号码输入错误！")
+// 		return result
+// 	}
+// 	db := db.Get_DB()
+// 	db.Exec("update users set phone = ? where id = ?", phone, id)
+// 	return nil
+// }
+
+//比较信息
+// func (u *User, ) contrast() bool {
+// 	if
+// }
+
+//更新用户信息
+func (user *User) Update() error {
+	var first User
+	fmt.Println(user.Username)
+	if user.Username == "" || user.Password == "" {
+		result := errors.New("参数错误")
 		return result
 	}
-	// db := db.Get_DB()
-
+	if user.Phone == "" {
+		result := errors.New("请验证电话号码")
+		return result
+	}
+	if len(user.Phone) != 11 {
+		result := errors.New("电话号码错误")
+		return result
+	}
+	user.Encrypt_Password()
+	db := db.Get_DB()
+	db.Where("id = ?", user.ID).First(&first)
+	e := db.Table("users").Where("id = ?", user.ID).First(&first)
+	if e.Error != nil {
+		return errors.New(e.Error.Error())
+	}
+	connection := db.Model(first).Updates(user)
+	if connection.Error != nil {
+		return errors.New(e.Error.Error())
+	}
 	return nil
 }

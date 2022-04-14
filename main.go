@@ -3,6 +3,7 @@ package main
 import (
 	"github.com/gin-gonic/gin"
 	"jinghaijun.com/store/api/authentication"
+	"jinghaijun.com/store/api/product"
 	"jinghaijun.com/store/api/user"
 )
 
@@ -20,7 +21,7 @@ func main() {
 		//Group_User.Use(authorization.Auth)
 		Group_User.GET("/:id", user.ListOne)         //用户查询全部信息
 		Group_User.DELETE("/:id", user.Cancelletion) //用户注销
-		Group_User.POST("/:id", user.UpdatePhone)
+		Group_User.PUT("", user.Update)
 	}
 	//需要获取验证码进行操作的步骤
 	// Group_Code := r.Group("/code")
@@ -28,11 +29,11 @@ func main() {
 	// 	Group_Code.Use("", Ver)
 	// }
 
-	// Group_Product := r.Group("/product")
-	// {
-	// 	Group_Product.Use(authorization.Auth)
-	// 	Group_Product.POST("", Product.Creat)
-	// }
+	Group_Product := r.Group("/product")
+	{
+		// Group_Product.Use(authorization.Auth)
+		Group_Product.POST("", product.CreateProduct)
+	}
 	r.Run(":3000")
 
 }

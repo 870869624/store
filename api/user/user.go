@@ -1,9 +1,7 @@
 package user
 
 import (
-	"fmt"
 	"net/http"
-	"strconv"
 
 	"github.com/gin-gonic/gin"
 	"jinghaijun.com/store/models/user"
@@ -53,21 +51,36 @@ func Cancelletion(context *gin.Context) {
 }
 
 // 更新用户的手机号信息
-func UpdatePhone(context *gin.Context) {
-	var num user.UpdatePhone
-	if err := context.ShouldBindJSON(&num); err != nil {
-		_, e := strconv.Atoi(num.Phone)
-		if e != nil {
-			context.AbortWithStatusJSON(http.StatusBadRequest, gin.H{
-				"message": "电话号码错误！",
-			})
-		}
-		context.AbortWithStatusJSON(http.StatusBadRequest, gin.H{
-			"提示": "参数错误",
-		})
-	}
-	fmt.Println(num)
-	e := user.AddPhone(num.ID, num.Phone)
-	context.AbortWithStatusJSON(e.Code, e.Error())
+// func UpdatePhone(context *gin.Context) {
+// 	var num user.UpdatePhone
+// 	err := context.ShouldBindJSON(&num)
+// 	_, e := strconv.Atoi(num.Phone)
+// 	if e != nil {
+// 		context.AbortWithStatusJSON(http.StatusBadRequest, gin.H{
+// 			"message": "电话号码错误！",
+// 		})
+// 		return
+// 	}
+// 	if err != nil {
+// 		context.AbortWithStatusJSON(http.StatusBadRequest, gin.H{
+// 			"提示": "参数错误",
+// 		})
+// 	}
 
+// 	fmt.Println(num)
+// 	a := user.AddPhone(num.ID, num.Phone)
+// 	context.AbortWithStatusJSON(a.Code, a.Error())
+
+// }
+func Update(context *gin.Context) {
+	var user user.User
+	context.ShouldBindJSON(&user)
+	e := user.Update()
+	if e != nil {
+		context.AbortWithStatusJSON(http.StatusBadRequest, e.Error())
+		return
+	}
+	context.AbortWithStatusJSON(200, gin.H{
+		"提示": "修改成功",
+	})
 }
