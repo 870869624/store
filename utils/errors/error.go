@@ -1,4 +1,4 @@
-package error
+package errors
 
 type Error struct {
 	Code    int

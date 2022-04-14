@@ -1,4 +1,4 @@
-package main
+package db
 
 import (
 	"fmt"
@@ -37,7 +37,7 @@ func (c *DBconnectConfig) connect() *gorm.DB {
 var instance *gorm.DB
 var once sync.Once
 
-func GET_DB() *gorm.DB {
+func Get_DB() *gorm.DB {
 	once.Do(func() {
 		config := DBconnectConfig{
 			Host:     constants.DB_HOST,
@@ -50,7 +50,7 @@ func GET_DB() *gorm.DB {
 		//开启调试模式
 		DEBUG := os.Getenv("DEBUG")
 		if DEBUG != "" {
-			instance = instance.DEBUG()
+			instance = instance.Debug()
 		}
 	})
 	return instance
