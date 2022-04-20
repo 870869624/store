@@ -96,7 +96,7 @@ func Listuser(id string) (*User, error) {
 	return &listuser, nil
 }
 
-//用户注销
+//用户注销(包方法)
 func Deleteuser(id string) *errors.Error {
 	var deletuser User
 	i, e := strconv.Atoi(id)
